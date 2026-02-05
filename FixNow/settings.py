@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'Profile',
     'Helper',
     'Booking',
+    'Review',
 ]
 
 MIDDLEWARE = [
