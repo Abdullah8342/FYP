@@ -46,10 +46,39 @@ class Booking(models.Model):
                 scheduled_at=self.scheduled_at,
                 status__in=["Pending", "Accepted"],
             )
-            .exclude()
+            .exclude(pk = self.pk)
             .exists()
         )
 
         if conflict:
             raise ValidationError("Helper already booked at this time")
-        return super().clean()
+
+    def accept(self):
+        if self.status != "Pending":
+            raise ValidationError('Invalid Transition')
+        self.status = "Accepted"
+        self.save(update_fields = ['status'])
+
+    def in_progress(self):
+        if self.status != "Accepted":
+            raise ValidationError('Invalid Transition')
+        self.status = "In Progress"
+        self.save(update_fields = ['status'])
+
+    def complete(self):
+        if self.status != "In Progress":
+            raise ValidationError('Invalid Transition')
+        self.status = "Completed"
+        self.save(update_fields = ['status'])
+
+
+    def cancel(self):
+        if self.status == "Completed":
+            raise ValidationError('Cannot Cancel Completed Booking')
+        self.status = "Rejected"
+        self.save(update_fields = ['status'])
+
+
+    def save(self,*args,**kwargs):
+        self.full_clean()
+        super().save(*args,**kwargs)
