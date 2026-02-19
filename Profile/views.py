@@ -1,11 +1,15 @@
 from rest_framework.views import APIView
+from rest_framework.generics import RetrieveAPIView,ListAPIView,UpdateAPIView
+from rest_framework import permissions
 from rest_framework.status import HTTP_202_ACCEPTED
 from rest_framework.response import Response
 from .serializers import ProfileSerializers
 from django.shortcuts import get_object_or_404
 from .models import Profile
 # Create your views here.
+
 class ProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     def get(self,request):
         queryset = get_object_or_404(Profile,user = request.user)
         serializers = ProfileSerializers(queryset)
@@ -22,8 +26,7 @@ class ProfileView(APIView):
         return Response(status=HTTP_202_ACCEPTED)
 
 
-class ProfileDetailsView(APIView):
-    def get(self,request,pk):
-        queryset = get_object_or_404(Profile,user = pk)
-        serializers = ProfileSerializers(queryset)
-        return Response(serializers.data)
+
+class ProfileDetailsView(RetrieveAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializers
