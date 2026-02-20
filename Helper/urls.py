@@ -1,11 +1,12 @@
-from django.urls import path
-from .views import HelperServiceView, HelperServiceDetailsView
+from django.urls import path,include
+from .views import LocationViewset,HelperServiceViewset
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register('location',LocationViewset)
+router.register('helperservice',HelperServiceViewset)
+
 
 urlpatterns = [
-    path("helperservice/", HelperServiceView.as_view(), name="helper-service"),
-    path(
-        "helperservice/<int:pk>/",
-        HelperServiceDetailsView.as_view(),
-        name="helper-service-details",
-    ),
+    path('',include(router.urls)),
 ]

@@ -10,7 +10,7 @@ class LocationSerializers(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = ["id", "country", "city", "area"]
-        read_only_fields = ["id", "country", "city", "area"]
+        read_only_fields = ["id"]
 
 
 
@@ -19,11 +19,6 @@ class HelperServiceSerializers(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         queryset = User.objects.all(),
         default = serializers.CurrentUserDefault()
-    )
-    profile = serializers.HyperlinkedRelatedField(
-        view_name = 'profile-view',
-        source = 'user.profile',
-        queryset = Profile.objects.all()
     )
     service = ServiceSerializers(read_only = True)
     service_id = serializers.PrimaryKeyRelatedField(
@@ -43,7 +38,6 @@ class HelperServiceSerializers(serializers.ModelSerializer):
         fields = [
             "id",
             "user",
-            "profile",
             "service_id",
             "service",
             "location_id",

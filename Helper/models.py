@@ -1,7 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from Service.models import Service
-
+User = settings.AUTH_USER_MODEL
 # Create your models here.
 
 
@@ -20,14 +20,14 @@ class HelperService(models.Model):
         Service, on_delete=models.SET_NULL, null=True, related_name="helper"
     )
     location = models.ManyToManyField(Location)
-    price = models.DecimalField(decimal_places=2, max_digits=10)
-    experience_year = models.PositiveIntegerField()
+    price = models.DecimalField(decimal_places=2, max_digits=8,default='1500.00')
+    experience_year = models.PositiveIntegerField(null=True)
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.service.name}"
+        return f"{self.user.get_full_name()} - {self.service.name}"
 
     class Meta:
         unique_together = ("user", "service")

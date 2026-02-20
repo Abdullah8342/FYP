@@ -26,7 +26,7 @@ urlpatterns = [
     path('api/auth/',include('Account.urls')),
     path('api/profile/',include('Profile.urls')),
     path('api/service/',include('Service.urls')),
-    # path('',include('Helper.urls')),
+    path('api/',include('Helper.urls')),
     # path('',include('Booking.urls')),
 ] + debug_toolbar_urls()
 

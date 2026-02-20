@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "Account",
     'Profile',
     'Service',
-    # 'Helper',
+    'Helper',
     # 'Booking',
     # 'Review',
 ]
