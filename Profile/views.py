@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from rest_framework.generics import RetrieveAPIView,ListAPIView,UpdateAPIView
+from rest_framework.generics import RetrieveAPIView
 from rest_framework import permissions
 from rest_framework.status import HTTP_202_ACCEPTED
 from rest_framework.response import Response

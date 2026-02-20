@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "Account",
     'Profile',
-    # 'Service',
+    'Service',
     # 'Helper',
     # 'Booking',
     # 'Review',
