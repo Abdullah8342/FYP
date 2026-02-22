@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Profile
+from Helper.serializers import HelperServiceSerializers
 
 User = get_user_model()
 
@@ -13,11 +14,11 @@ class ProfileSerializers(serializers.ModelSerializer):
         max_length=120, read_only=True, source="user.get_full_name"
     )
     email = serializers.EmailField(source="user.email", read_only=True)
-    # service
+    service = HelperServiceSerializers(read_only = True,source = 'user.helper',many = True)
     profile_picture = serializers.ImageField(required = False)
     phone = serializers.CharField(required=True)
 
     class Meta:
         model = Profile
-        fields = ["id", "user", "full_name", "email", "profile_picture", "phone"]
-        read_only_fields = ["id","user","full_name","email"]
+        fields = ["id", "user", "full_name","service", "email", "profile_picture", "phone"]
+        read_only_fields = ["id","user","service","full_name","email"]
