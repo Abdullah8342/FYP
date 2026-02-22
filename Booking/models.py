@@ -1,9 +1,9 @@
-from django.db import models
-from django.contrib.auth.models import User
-from Helper.models import HelperService
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-
+from django.conf import settings
+from django.db import models
+from Helper.models import HelperService
+User = settings.AUTH_USER_MODEL
 # Create your models here.
 
 class Booking(models.Model):
@@ -77,8 +77,3 @@ class Booking(models.Model):
             raise ValidationError('Cannot Cancel Completed Booking')
         self.status = "Rejected"
         self.save(update_fields = ['status'])
-
-
-    def save(self,*args,**kwargs):
-        self.full_clean()
-        super().save(*args,**kwargs)

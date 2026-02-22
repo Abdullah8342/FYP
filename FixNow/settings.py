@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'Profile',
     'Service',
     'Helper',
-    # 'Booking',
+    'Booking',
     # 'Review',
 ]
 

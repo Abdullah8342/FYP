@@ -1,47 +1,26 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
-from rest_framework.response import Response
+from django.core.exceptions import ValidationError
+from rest_framework import viewsets,status,permissions
 from .serializers import BookingSerializers
 from .models import Booking
+from .permissions import IsOwner
 
 
 # Create your views here.
-class BookingView(APIView):
+class BookingViewset(viewsets.ModelViewSet):
+    permission_classes = [IsOwner,permissions.IsAuthenticated]
+    def get_queryset(self):
+        queryset = Booking.objects.filter(user = self.request.user)
+        return queryset
 
-    def get(self, request):
-        queryset = Booking.objects.filter(user=request.user)
-        serializers = BookingSerializers(
-            queryset, many=True, context={"request": request}
-        )
-        return Response(serializers.data)
+    serializer_class = BookingSerializers
 
-    def post(self, request):
-        serializers = BookingSerializers(
-            data=request.data, context={"request": request}
-        )
-        serializers.is_valid(raise_exception=True)
-        serializers.save()
-        return Response(status=HTTP_201_CREATED)
+    def get_serializer_context(self):
+        return {'request':self.request}
 
-
-class BookingDetailsView(APIView):
-
-    def get(self, request, pk):
-        queryset = get_object_or_404(Booking, id=pk)
-        serializers = BookingSerializers(queryset, context={"request": request})
-        return Response(serializers.data)
-
-    def patch(self, request, pk):
-        queryset = get_object_or_404(Booking, id=pk)
-        serializers = BookingSerializers(
-            queryset, data=request.data, context={"request": request}
-        )
-        serializers.is_valid(raise_exception=True)
-        serializers.save()
-        return Response(status=HTTP_200_OK)
-
-    def delete(self, request, pk):
-        queryset = get_object_or_404(Booking, id=pk)
-        queryset.delete()
-        return Response(status=HTTP_204_NO_CONTENT)
+    def destroy(self, request, *args, **kwargs):
+        print('Destroy In BookingViewset')
+        booking = get_object_or_404(Booking,id = kwargs['pk'])
+        if booking.status in ["Accepted","In Progress","Completed"]:
+            raise ValidationError(status = status.HTTP_405_METHOD_NOT_ALLOWED)
+        return super().destroy(request, *args, **kwargs)

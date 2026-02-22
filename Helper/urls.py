@@ -1,6 +1,6 @@
+from rest_framework.routers import DefaultRouter
 from django.urls import path,include
 from .views import LocationViewset,HelperServiceViewset
-from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('location',LocationViewset)
