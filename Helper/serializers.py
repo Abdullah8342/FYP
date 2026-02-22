@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from Service.serializers import ServiceSerializers
 from Service.models import Service
 from .models import Location, HelperService
-from Profile.models import Profile
 User = get_user_model()
 
 class LocationSerializers(serializers.ModelSerializer):
@@ -17,8 +16,7 @@ class LocationSerializers(serializers.ModelSerializer):
 
 class HelperServiceSerializers(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
-        queryset = User.objects.all(),
-        default = serializers.CurrentUserDefault()
+        read_only = True
     )
     service = ServiceSerializers(read_only = True)
     service_id = serializers.PrimaryKeyRelatedField(
@@ -49,3 +47,11 @@ class HelperServiceSerializers(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ['id','created_at','updated_at','service','location']
+
+
+
+    def create(self, validated_data):
+        user = self.context['user']
+        print(validated_data) # Only For Debug
+        validated_data['user'] = user
+        return super().create(validated_data)
