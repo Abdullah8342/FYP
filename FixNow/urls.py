@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/service/',include('Service.urls')),
     path('api/',include('Helper.urls')),
     path('api/',include('Booking.urls')),
+    path('api/',include('Review.urls')),
 ] + debug_toolbar_urls()
 
 if settings.DEBUG:

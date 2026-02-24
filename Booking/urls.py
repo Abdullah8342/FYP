@@ -6,5 +6,5 @@ router = DefaultRouter()
 router.register('booking',BookingViewset,basename='booking')
 
 urlpatterns = [
-    path('',include(router.urls)),
+    path('',include(router.urls))
 ]

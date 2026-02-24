@@ -1,30 +1,28 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from Booking.models import Booking
 from .models import Review
 
-User = get_user_model()
+User = settings.AUTH_USER_MODEL
 
 
 class ReviewSerializers(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(), default=serializers.CurrentUserDefault()
+        read_only = True
     )
-    user_profile = serializers.HyperlinkedRelatedField(
-        view_name="profile-view",
-        source="user.profile",
-        queryset = User.objects.all()
-    )
-    booking = serializers.PrimaryKeyRelatedField(queryset=Booking.objects.all())
+    booking = serializers.PrimaryKeyRelatedField(write_only = True,queryset = Booking.objects.all())
     class Meta:
         model = Review
         fields = [
             "id",
             "user",
-            "user_profile",
             "booking",
             "rating",
             "comment",
             "created_at",
         ]
         read_only_fields = ["id", "created_at"]
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)

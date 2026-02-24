@@ -22,5 +22,5 @@ class BookingViewset(viewsets.ModelViewSet):
         print('Destroy In BookingViewset')
         booking = get_object_or_404(Booking,id = kwargs['pk'])
         if booking.status in ["Accepted","In Progress","Completed"]:
-            raise ValidationError(status = status.HTTP_405_METHOD_NOT_ALLOWED)
+            raise ValidationError("Can't Delete The Booking")
         return super().destroy(request, *args, **kwargs)

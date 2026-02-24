@@ -53,6 +53,10 @@ class Booking(models.Model):
         if conflict:
             raise ValidationError("Helper already booked at this time")
 
+    def save(self,*args,**kwargs):
+        self.full_clean()
+        return super().save(*args,**kwargs)
+
     def accept(self):
         if self.status != "Pending":
             raise ValidationError('Invalid Transition')
