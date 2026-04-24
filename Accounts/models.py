@@ -50,7 +50,7 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         if self.is_superuser:
-            kwargs['roll'] = 'A'
+            self.roll = 'A'
         elif not self.is_superuser and self.roll == 'A':
             raise ValueError("message: Only SuperUser Can Have Roll Admin")
         super().save(*args, **kwargs)

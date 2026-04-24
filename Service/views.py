@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework import permissions
 from .permissions import IsAdminOrReadOnly
 from .serializers import ServiceSerializers
 from .models import Service
@@ -8,6 +7,6 @@ from .models import Service
 
 
 class ServiceViewset(viewsets.ModelViewSet):
-    permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated]
+    permission_classes = [IsAdminOrReadOnly]
     queryset = Service.objects.all()
     serializer_class = ServiceSerializers

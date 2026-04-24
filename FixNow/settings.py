@@ -43,15 +43,18 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     "debug_toolbar",
-    "Account",
-    'Profile',
+    "Accounts",
+    # 'Profile',
     'Service',
-    'Helper',
-    'Booking',
-    'Review',
+    # 'Helper',
+    # 'Booking',
+    # 'Review',
+    # Celery
+    'django_celery_results',
+
 ]
 
-AUTH_USER_MODEL = 'Account.User'
+AUTH_USER_MODEL = 'Accounts.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -158,3 +161,27 @@ SIMPLE_JWT = {
 
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+
+# Celery
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+
+# Email
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "abdullah.4110r.work@gmail.com"
+
+EMAIL_HOST_PASSWORD = "xkfq zbjs wzmc qhsv"
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

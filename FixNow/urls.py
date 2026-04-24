@@ -23,12 +23,12 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/auth/',include('Account.urls')),
-    path('api/profile/',include('Profile.urls')),
-    path('api/service/',include('Service.urls')),
-    path('api/',include('Helper.urls')),
-    path('api/',include('Booking.urls')),
-    path('api/',include('Review.urls')),
+    path('account/',include('Accounts.urls')),
+    # path('api/profile/',include('Profile.urls')),
+    path('service/',include('Service.urls')),
+    # path('api/',include('Helper.urls')),
+    # path('api/',include('Booking.urls')),
+    # path('api/',include('Review.urls')),
 ] + debug_toolbar_urls()
 
 if settings.DEBUG:
