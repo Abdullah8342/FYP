@@ -46,12 +46,12 @@ class HelperServiceSerializers(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
-        read_only_fields = ['id','created_at','updated_at','service','location']
+        read_only_fields = ['id','user','created_at','updated_at','service','location']
 
 
 
     def create(self, validated_data):
-        user = self.context['user']
-        print(validated_data) # Only For Debug
-        validated_data['user'] = user
+        validated_data['user'] = self.context['user']
         return super().create(validated_data)
+
+

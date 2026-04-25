@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "Accounts",
     # 'Profile',
     'Service',
-    # 'Helper',
+    'Helper',
     # 'Booking',
     # 'Review',
     # Celery

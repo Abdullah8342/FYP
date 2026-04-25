@@ -8,11 +8,13 @@ User = settings.AUTH_USER_MODEL
 class Location(models.Model):
     country = models.CharField(max_length=100)
     city = models.CharField(max_length=150)
-    area = models.CharField(max_length=150, unique=True)
+    area = models.CharField(max_length=150)
 
     def __str__(self):
         return f"{self.country} | {self.city} | {self.area}"
 
+    class Meta:
+        unique_together = ['city','area']
 
 class HelperService(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="helper")
@@ -20,9 +22,9 @@ class HelperService(models.Model):
         Service, on_delete=models.SET_NULL, null=True, related_name="helper"
     )
     location = models.ManyToManyField(Location)
-    price = models.DecimalField(decimal_places=2, max_digits=8,default='1500.00')
+    price = models.DecimalField(decimal_places=2, max_digits=8)
     experience_year = models.PositiveIntegerField(null=True)
-    is_available = models.BooleanField(default=True)
+    is_available = models.BooleanField()
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
@@ -31,3 +33,5 @@ class HelperService(models.Model):
 
     class Meta:
         unique_together = ("user", "service")
+
+# REFACTOR: If Later
