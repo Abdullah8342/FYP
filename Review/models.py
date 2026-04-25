@@ -21,25 +21,24 @@ class Review(models.Model):
         return f"{self.user.username} - {self.booking}"
 
     def clean(self):
-        print('Clean Is Running')
-        if self.rating not in range(1,6):
+        if self.rating not in range(1, 6):
             raise ValidationError("Rating Must Be From One To Five")
-        if not self.booking.status == "Completed":
-            raise ValidationError("Comment Only When Booking Is Completed")
-        if not self.booking.user == self.user:
-            raise ValidationError('Only Booked User Can Comment')
-        if Review.objects.filter(user = self.user,booking = self.booking).exists():
-            raise ValidationError('Only One Comment On One Booking')
-        return super().clean()
+        if self.booking.status != "Completed":
+            raise ValidationError("Reviews Only Allowed After Service Completion")
+        if self.booking.user != self.user:
+            raise ValidationError("Only The Booking Customer Can Review")
+        if Review.objects.filter(user=self.user, booking=self.booking).exists():
+            raise ValidationError("You Already Reviewed This Booking")
 
-    def save(self,*args,**kwargs):
+    def save(self, *args, **kwargs):
         self.full_clean()
-        return super().save(*args,**kwargs)
+        return super().save(*args, **kwargs)
 
-    def get_average_rating(self):
-        reviews = Review.objects.filter(
-            booking=self.booking,helper_service__user=self.user
-        )
-        if not reviews.exists():
-            return 0
-        return reviews.aggregate(avg_rating=Avg("rating"))["avg_rating"] or 0
+    def get_helper_average_rating(self):
+        """Get helper's average rating from all reviews"""
+        helper_user = self.booking.helper_service.user
+        avg = Review.objects.filter(
+            booking__helper_service__user=helper_user
+        ).aggregate(avg_rating=Avg("rating"))
+        
+        return round(avg['avg_rating'] or 0, 2)
