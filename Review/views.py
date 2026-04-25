@@ -8,7 +8,6 @@ from .models import Review
 User = settings.AUTH_USER_MODEL
 
 
-# Create your views here.
 class ReviewCreate(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Review.objects.all()
@@ -20,9 +19,15 @@ class ReviewCreate(generics.CreateAPIView):
         return context
 
 
-class ReviewUpdateDestroy(generics.RetrieveUpdateAPIView):
+class ReviewList(generics.ListAPIView):
+    queryset = Review.objects.all().select_related('user', 'booking').prefetch_related('booking__helper_service')
+    serializer_class = ReviewSerializers
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class ReviewUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsOwnerOrIsAdminOrReadOnly]
-    queryset = Review.objects.all()
+    queryset = Review.objects.all().select_related('user', 'booking').prefetch_related('booking__helper_service')
     serializer_class = ReviewSerializers
 
     def get_serializer_context(self):

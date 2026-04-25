@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'Service',
     'Helper',
     'Booking',
-    # 'Review',
+    'Review',
     # Celery
     'django_celery_results',
 
