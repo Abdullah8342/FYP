@@ -28,5 +28,6 @@ class ProfileView(APIView):
 
 
 class ProfileDetailsView(RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializers

@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('account/',include('Accounts.urls')),
-    # path('api/profile/',include('Profile.urls')),
+    path('profile/',include('Profile.urls')),
     path('service/',include('Service.urls')),
     path('helper/',include('Helper.urls')),
     # path('api/',include('Booking.urls')),

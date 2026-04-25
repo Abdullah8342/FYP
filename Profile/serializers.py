@@ -14,11 +14,21 @@ class ProfileSerializers(serializers.ModelSerializer):
         max_length=120, read_only=True, source="user.get_full_name"
     )
     email = serializers.EmailField(source="user.email", read_only=True)
-    service = HelperServiceSerializers(read_only = True,source = 'user.helper',many = True)
-    profile_picture = serializers.ImageField(required = False)
+    roll = serializers.ReadOnlyField(source="user.roll")
+    service = HelperServiceSerializers(read_only=True, source="user.helper", many=True)
+    profile_picture = serializers.ImageField(required=False)
     phone = serializers.CharField(required=True)
 
     class Meta:
         model = Profile
-        fields = ["id", "user", "full_name","service", "email", "profile_picture", "phone"]
-        read_only_fields = ["id","user","service","full_name","email"]
+        fields = [
+            "id",
+            "user",
+            "full_name",
+            "service",
+            "roll",
+            "email",
+            "profile_picture",
+            "phone",
+        ]
+        read_only_fields = ["id", "user", "service", "full_name", "email", "roll"]
