@@ -1,10 +1,11 @@
 from rest_framework import serializers
-from django.conf import settings
+from django.utils import timezone
+from django.contrib.auth import get_user_model
 from Helper.models import HelperService
 from Helper.serializers import HelperServiceSerializers
 from .models import Booking
 
-User = settings.AUTH_USER_MODEL
+User = get_user_model()
 
 
 class BookingSerializers(serializers.ModelSerializer):
@@ -28,6 +29,34 @@ class BookingSerializers(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ["id", "created_at", "updated_at"]
+
+    def validate_scheduled_at(self,value):
+        min_time = timezone.now() + timezone.timedelta(minutes=15)
+        if value < min_time:
+            raise serializers.ValidationError("Booking must be at least 15 minutes in the future.")
+        return value
+
+    def validate(self, attrs):
+        user = self.context['request'].user
+        if user == attrs['helper_service'].user:
+            raise serializers.ValidationError("You Cannot Book Your Own Service")
+
+        if not attrs['helper_service'].is_available:
+            raise serializers.ValidationError("Unavailable Service")
+
+        conflict = (
+            Booking.objects.filter(
+                helper_service=attrs['helper_service'],
+                scheduled_at=attrs['scheduled_at'],
+                status__in=["Pending", "Accepted"],
+            )
+        )
+        if self.instance:
+            if conflict.exclude(pk = self.instance.pk).exists():
+                raise serializers.ValidationError("Helper already booked at this time")
+        
+        
+        return super().validate(attrs)
 
     def create(self, validated_data):
         validated_data["user"] = self.context["request"].user

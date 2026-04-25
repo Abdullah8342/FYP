@@ -6,6 +6,7 @@ from Helper.models import HelperService
 User = settings.AUTH_USER_MODEL
 # Create your models here.
 
+
 class Booking(models.Model):
     STATUS_CHOICES = [
         ("Accepted", "Accepted"),

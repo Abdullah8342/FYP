@@ -8,7 +8,7 @@ from .permissions import IsOwner
 
 # Create your views here.
 class BookingViewset(viewsets.ModelViewSet):
-    permission_classes = [IsOwner,permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated,IsOwner]
     def get_queryset(self):
         queryset = Booking.objects.filter(user = self.request.user)
         return queryset
