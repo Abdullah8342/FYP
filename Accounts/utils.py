@@ -29,7 +29,6 @@ def verify_otp(email,otp):
     '''
         Verify OTP
     '''
-    print(otp)
     stored_hashed = cache.get(f"otp {email}")
     if not stored_hashed:
         return False

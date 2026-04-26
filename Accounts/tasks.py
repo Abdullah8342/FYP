@@ -1,4 +1,5 @@
 from celery import shared_task
+from django.conf import settings
 from django.core.mail import send_mail
 
 
@@ -21,15 +22,13 @@ If you did not request this code, ignore this email.
 Do not share this OTP with anyone.
 
 Thanks,
-ParkShare Team
+FixNow Team
 """
 
     send_mail(
         subject="Your OTP Verification Code",
         message=message,
-        from_email="abdullah.4110r.work@gmail.com",
+        from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[email],
         fail_silently=False,
     )
-
-    print("Email sent successfully")

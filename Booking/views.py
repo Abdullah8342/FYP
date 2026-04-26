@@ -19,7 +19,6 @@ class BookingViewset(viewsets.ModelViewSet):
         return {'request':self.request}
 
     def destroy(self, request, *args, **kwargs):
-        print('Destroy In BookingViewset')
         booking = get_object_or_404(Booking,id = kwargs['pk'])
         if booking.status in ["Accepted","In Progress","Completed"]:
             raise ValidationError("Can't Delete The Booking")

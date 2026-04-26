@@ -47,7 +47,7 @@ class ForgetPassword(APIView):
         otp = generate_otp()
         save_otp(email, otp)
         send_otp_email.delay(email, otp)
-        return Response({"message": "opt sent to your Mail"})
+        return Response({"message": "OTP sent to your email"})
 
 
 class PasswordReset(APIView):
@@ -79,7 +79,6 @@ class RequestOTPView(APIView):
         """
         Post Request
         """
-        print("POST REQUESTOTPVIEW ")
         serializers = RequestOTPSerializer(data=request.data)
         serializers.is_valid(raise_exception=True)
         email = serializers.validated_data["email"]
@@ -89,7 +88,7 @@ class RequestOTPView(APIView):
         otp = generate_otp()
         save_otp(email, otp)
         send_otp_email.delay(email, otp)
-        return Response({"message": "opt sent"})
+        return Response({"message": "OTP sent"})
 
 
 class VerifyOTPView(APIView):
